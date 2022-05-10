@@ -11,7 +11,7 @@ enum RawIdentityError: Error {
     case signingKeyNotFound
     case recoveryKeyNotFound
     case updateKeyNotFound
-    case privateKeyNotFound
+    case privateKeyNotFound(keyId:String)
     case keyIdNotFound
 }
 
@@ -69,6 +69,9 @@ struct RawIdentity: Codable {
         let secret = keyContainer.keyReference
         let publicKey = try Secp256k1().createPublicKey(forSecret: secret)
         let privateKey = try EphemeralSecret(with: secret)
+        if privateKey.value.isEmpty {
+            throw RawIdentityError.privateKeyNotFound(keyId: secret.id.uuidString)
+        }
         
         // Wrap them up in a JSON Web Key
         return Jwk(keyType: "EC",
@@ -82,16 +85,16 @@ struct RawIdentity: Codable {
     
     private static func keyContainerFromJwk(_ jwk: Jwk) throws -> KeyContainer {
 
-        guard let privateKeyData = jwk.d else {
-            throw RawIdentityError.privateKeyNotFound
+        guard let keyId = jwk.keyId else {
+            throw RawIdentityError.keyIdNotFound
+        }
+        guard let privateKeyData = jwk.d,
+              !privateKeyData.isEmpty else {
+            throw RawIdentityError.privateKeyNotFound(keyId: keyId)
         }
         let privateKey = EphemeralSecret(with: privateKeyData,
                                          accessGroup: VCSDKConfiguration.sharedInstance.accessGroupIdentifier)
 
-        guard let keyId = jwk.keyId else {
-            throw RawIdentityError.keyIdNotFound
-        }
-        
         // Wrap it all up
         return KeyContainer(keyReference: privateKey, keyId: keyId)
     }
