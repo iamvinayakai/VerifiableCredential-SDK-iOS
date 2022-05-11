@@ -11,7 +11,7 @@ enum RawIdentityError: Error {
     case signingKeyNotFound
     case recoveryKeyNotFound
     case updateKeyNotFound
-    case privateKeyNotFound(keyId:String)
+    case privateKeyNotFound(keyId: String, accessGroup: String?)
     case keyIdNotFound
 }
 
@@ -64,14 +64,28 @@ struct RawIdentity: Codable {
     }
     
     private static func jwkFromKeyContainer(_ keyContainer: KeyContainer) throws -> Jwk {
-        
-        // Get out the public and private components of the key (pair)
+
+        let log = VCSDKLog.sharedInstance
+
+        // Get out the private and public components of the key (pair)
         let secret = keyContainer.keyReference
-        let publicKey = try Secp256k1().createPublicKey(forSecret: secret)
+        let secretId = secret.id.uuidString
+        let accessGroup = secret.accessGroup ?? "nil"
+        do {
+            try secret.migrateKey(fromAccessGroup: nil)
+            let message = "Migrated key \(secretId) to \"\(accessGroup)\" without any error"
+            log.logInfo(message: message)
+        }
+        catch {
+            let message = "Caught \(String(describing: error)) whilst trying to migrate key \(secretId) to \"\(accessGroup)\""
+            log.logWarning(message: message)
+        }
         let privateKey = try EphemeralSecret(with: secret)
         if privateKey.value.isEmpty {
-            throw RawIdentityError.privateKeyNotFound(keyId: secret.id.uuidString)
+            throw RawIdentityError.privateKeyNotFound(keyId: secretId,
+                                                      accessGroup: secret.accessGroup)
         }
+        let publicKey = try Secp256k1().createPublicKey(forSecret: privateKey)
         
         // Wrap them up in a JSON Web Key
         return Jwk(keyType: "EC",
@@ -90,7 +104,7 @@ struct RawIdentity: Codable {
         }
         guard let privateKeyData = jwk.d,
               !privateKeyData.isEmpty else {
-            throw RawIdentityError.privateKeyNotFound(keyId: keyId)
+            throw RawIdentityError.privateKeyNotFound(keyId: keyId, accessGroup: nil)
         }
         let privateKey = EphemeralSecret(with: privateKeyData,
                                          accessGroup: VCSDKConfiguration.sharedInstance.accessGroupIdentifier)
