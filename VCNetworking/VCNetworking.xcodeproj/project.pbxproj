@@ -86,7 +86,6 @@
 		922D7E71252523FD00E4C8B5 /* Process+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922D7E4C252523FD00E4C8B5 /* Process+Promise.swift */; };
 		922D7E72252523FD00E4C8B5 /* NSTask+AnyPromise.m in Sources */ = {isa = PBXBuildFile; fileRef = 922D7E4D252523FD00E4C8B5 /* NSTask+AnyPromise.m */; };
 		92E29993252522ED00B25BB6 /* VCEntities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92E29992252522ED00B25BB6 /* VCEntities.framework */; };
-		92F2ECB925B9159600A6911C /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92F2ECB825B9159600A6911C /* PromiseKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -193,7 +192,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				92E29993252522ED00B25BB6 /* VCEntities.framework in Frameworks */,
-				92F2ECB925B9159600A6911C /* PromiseKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
