@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2F5C3D6F2834092300CA14DC /* VCEntities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92E29992252522ED00B25BB6 /* VCEntities.framework */; };
 		550F1D5B25093911009AF467 /* MockDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 550F1D5A25093911009AF467 /* MockDecoder.swift */; };
 		550F1D5D25093C0C009AF467 /* MockNetworkOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 550F1D5C25093C0C009AF467 /* MockNetworkOperation.swift */; };
 		550F1D6325094691009AF467 /* Encoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 550F1D6225094691009AF467 /* Encoding.swift */; };
@@ -85,7 +86,6 @@
 		922D7E70252523FD00E4C8B5 /* PMKFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 922D7E4B252523FD00E4C8B5 /* PMKFoundation.h */; };
 		922D7E71252523FD00E4C8B5 /* Process+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922D7E4C252523FD00E4C8B5 /* Process+Promise.swift */; };
 		922D7E72252523FD00E4C8B5 /* NSTask+AnyPromise.m in Sources */ = {isa = PBXBuildFile; fileRef = 922D7E4D252523FD00E4C8B5 /* NSTask+AnyPromise.m */; };
-		92E29993252522ED00B25BB6 /* VCEntities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92E29992252522ED00B25BB6 /* VCEntities.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -191,7 +191,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				92E29993252522ED00B25BB6 /* VCEntities.framework in Frameworks */,
+				2F5C3D6F2834092300CA14DC /* VCEntities.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -861,7 +861,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MACH_O_TYPE = staticlib;
+				MACH_O_TYPE = mh_dylib;
 				PRODUCT_BUNDLE_IDENTIFIER = com.microsoft.VCNetworking;
 				PRODUCT_NAME = VCNetworking;
 				SKIP_INSTALL = YES;
@@ -891,7 +891,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MACH_O_TYPE = staticlib;
+				MACH_O_TYPE = mh_dylib;
 				PRODUCT_BUNDLE_IDENTIFIER = com.microsoft.VCNetworking;
 				PRODUCT_NAME = VCNetworking;
 				SKIP_INSTALL = YES;

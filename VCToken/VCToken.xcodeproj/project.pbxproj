@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2F5C3D692834090500CA14DC /* VCCrypto.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92E2998E252522D000B25BB6 /* VCCrypto.framework */; };
 		2F848B66282D5236005D3176 /* PbesJwe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F848B65282D5236005D3176 /* PbesJwe.swift */; };
 		2F848B6B282D5266005D3176 /* JweEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F848B67282D5266005D3176 /* JweEncoder.swift */; };
 		2F848B6C282D5266005D3176 /* Jwk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F848B68282D5266005D3176 /* Jwk.swift */; };
@@ -36,7 +37,6 @@
 		55ADE29D24F583DB00D9990E /* JwsDecoderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ADE29C24F583DB00D9990E /* JwsDecoderTests.swift */; };
 		55ADE2A124F585B100D9990E /* ClaimsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ADE2A024F585B100D9990E /* ClaimsTest.swift */; };
 		55C6C4A6250816500082BE73 /* Secp256k1Verifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C6C4A5250816500082BE73 /* Secp256k1Verifier.swift */; };
-		92E2998F252522D000B25BB6 /* VCCrypto.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92E2998E252522D000B25BB6 /* VCCrypto.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -90,7 +90,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				92E2998F252522D000B25BB6 /* VCCrypto.framework in Frameworks */,
+				2F5C3D692834090500CA14DC /* VCCrypto.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -488,7 +488,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MACH_O_TYPE = staticlib;
+				MACH_O_TYPE = mh_dylib;
 				PRODUCT_BUNDLE_IDENTIFIER = com.microsoft.VCToken;
 				PRODUCT_NAME = VCToken;
 				SKIP_INSTALL = YES;
@@ -516,7 +516,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MACH_O_TYPE = staticlib;
+				MACH_O_TYPE = mh_dylib;
 				PRODUCT_BUNDLE_IDENTIFIER = com.microsoft.VCToken;
 				PRODUCT_NAME = VCToken;
 				SKIP_INSTALL = YES;

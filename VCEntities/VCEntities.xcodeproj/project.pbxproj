@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2F5C3D6C2834091800CA14DC /* VCToken.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5514E99B2609291E0004BD19 /* VCToken.framework */; };
 		2F7786FA2833FC1D000A4215 /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F4EEF80282E758E00B62311 /* PromiseKit.framework */; };
 		2F848B7F282D5D25005D3176 /* UnprotectedBackup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F848B70282D5D25005D3176 /* UnprotectedBackup.swift */; };
 		2F848B80282D5D25005D3176 /* ProtectedBackupData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F848B72282D5D25005D3176 /* ProtectedBackupData.swift */; };
@@ -24,7 +25,6 @@
 		55011E8E2572DFBD002D2690 /* DefaultLogConsumer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55011E8D2572DFBD002D2690 /* DefaultLogConsumer.swift */; };
 		55077ABA25A62DE10052C58D /* IdentifierFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55077AB925A62DE10052C58D /* IdentifierFormatter.swift */; };
 		55077ACA25A7763B0052C58D /* IdentifierDocumentPublicKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55077AC925A7763B0052C58D /* IdentifierDocumentPublicKey.swift */; };
-		5514E99C2609291E0004BD19 /* VCToken.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5514E99B2609291E0004BD19 /* VCToken.framework */; };
 		5517D28E25B90D0A00FBD239 /* ExchangeRequestClaims.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5517D28C25B90D0A00FBD239 /* ExchangeRequestClaims.swift */; };
 		5517D28F25B90D0A00FBD239 /* ExchangeRequestContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5517D28D25B90D0A00FBD239 /* ExchangeRequestContainer.swift */; };
 		5518CC642526427D00C7A21B /* PresentationResponseClaims.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5518CC632526427D00C7A21B /* PresentationResponseClaims.swift */; };
@@ -312,8 +312,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5514E99C2609291E0004BD19 /* VCToken.framework in Frameworks */,
 				2F7786FA2833FC1D000A4215 /* PromiseKit.framework in Frameworks */,
+				2F5C3D6C2834091800CA14DC /* VCToken.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1206,7 +1206,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MACH_O_TYPE = staticlib;
+				MACH_O_TYPE = mh_dylib;
 				PRODUCT_BUNDLE_IDENTIFIER = com.microsoft.VCEntities;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -1236,7 +1236,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MACH_O_TYPE = staticlib;
+				MACH_O_TYPE = mh_dylib;
 				PRODUCT_BUNDLE_IDENTIFIER = com.microsoft.VCEntities;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
