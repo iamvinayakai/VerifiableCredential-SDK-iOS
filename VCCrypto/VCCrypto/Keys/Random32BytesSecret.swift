@@ -101,3 +101,10 @@ final class Random32BytesSecret: Secret {
                                   value: &value)
     }
 }
+
+extension Random32BytesSecret : CustomStringConvertible {
+    public var description: String {
+        let accessGroup = self.accessGroup ?? "nil"
+        return "\(String(describing: Self.self)) - id: \(String(describing: self.id)); accessGroup: \(accessGroup)"
+    }
+}

@@ -9,7 +9,7 @@ import CommonCrypto
 enum AesError : Error {
     case keyWrapError
     case keyUnwrapError
-    case invalidSecret
+    case invalidSecretForAes(description:String, tag:String, op:String)
     case cryptoError(operation:CCOperation, status:CCCryptorStatus)
 }
 
@@ -25,9 +25,13 @@ public struct Aes {
     public func wrap(key: VCCryptoSecret, with kek: VCCryptoSecret) throws -> Data {
 
         // Look for an early out
-        guard key is Secret, kek is Secret else {
-            throw AesError.invalidSecret
+        guard key is Secret else {
+            throw AesError.invalidSecretForAes(description: String(describing: key), tag:"lhs", op:"wrap")
         }
+        guard kek is Secret else {
+            throw AesError.invalidSecretForAes(description: String(describing: key), tag:"rhs", op:"wrap")
+        }
+        
         var wrappedSize: Int = 0
         try (key as! Secret).withUnsafeBytes { (keyPtr: UnsafeRawBufferPointer) in
             let keySize = keyPtr.bindMemory(to: UInt8.self).count
@@ -64,7 +68,7 @@ public struct Aes {
 
         // Look for an early out
         guard kek is Secret else {
-            throw AesError.invalidSecret
+            throw AesError.invalidSecretForAes(description: String(describing: kek), tag:"", op:"unwrap")
         }
 
         var unwrappedSize = CCSymmetricUnwrappedSize(keyWrapAlg, wrapped.count)
@@ -116,7 +120,7 @@ public struct Aes {
     private func apply(operation: CCOperation, withOptions options: CCOptions, to data: Data, using key: VCCryptoSecret, iv: Data) throws -> Data {
 
         // Look for an early out
-        guard key is Secret else { throw AesError.invalidSecret }
+        guard key is Secret else { throw AesError.invalidSecretForAes(description: String(describing: key), tag:"", op:String(describing: operation)) }
 
         // Allocate the output buffer
         var outputSize = size_t(data.count)

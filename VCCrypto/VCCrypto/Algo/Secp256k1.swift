@@ -13,7 +13,7 @@ enum Secp256k1Error: Error {
     case invalidSignature
     case invalidPublicKey
     case publicKeyCreationFailure
-    case invalidSecret
+    case invalidSecretForSecp256k1(description: String)
 }
 
 public struct Secp256k1: Signing {
@@ -28,7 +28,7 @@ public struct Secp256k1: Signing {
     public func sign(messageHash: Data, withSecret secret: VCCryptoSecret) throws -> Data {
         
         // Validate params
-        guard secret is Secret else { throw Secp256k1Error.invalidSecret }
+        guard secret is Secret else { throw Secp256k1Error.invalidSecretForSecp256k1(description: String(describing: secret)) }
         guard messageHash.count == 32 else { throw Secp256k1Error.invalidMessageHash }
 
         // Create the context and signature data structure
@@ -143,7 +143,7 @@ public struct Secp256k1: Signing {
     public func createKeyPair(forSecret secret: VCCryptoSecret) throws -> (Data, Secp256k1PublicKey)
     {
         // Validate params
-        guard secret is Secret else { throw Secp256k1Error.invalidSecret }
+        guard secret is Secret else { throw Secp256k1Error.invalidSecretForSecp256k1(description: String(describing: secret)) }
         
         // Get out the private key data
         var privateKey = Data()

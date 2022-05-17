@@ -8,7 +8,7 @@ import CommonCrypto
 
 enum HmacSha2Error: Error {
     case invalidMessage
-    case invalidSecret
+    case invalidSecretForHmac(description:String)
     case invalidAlgorithm
 }
 
@@ -40,7 +40,7 @@ public struct HmacSha2 {
 
         // Look for an early out
         guard message.count > 0 else { throw HmacSha2Error.invalidMessage }
-        guard secret is Secret else { throw HmacSha2Error.invalidSecret }
+        guard secret is Secret else { throw HmacSha2Error.invalidSecretForHmac(description: String(describing: secret)) }
 
         // Apply
         let ccHmacAlg = self.algorithm
