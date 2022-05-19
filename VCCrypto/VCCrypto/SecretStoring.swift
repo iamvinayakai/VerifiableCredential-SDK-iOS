@@ -6,8 +6,8 @@
 import Foundation
 
 public enum SecretStoringError: Error {
-    case itemNotFound
-    case invalidItemInStore
+    case itemNotFound(id: UUID, itemTypeCode: String, accessGroup: String?)
+    case invalidItemInStore(id: UUID, itemTypeCode: String, accessGroup: String?)
     case itemAlreadyInStore
     case invalidType
 }

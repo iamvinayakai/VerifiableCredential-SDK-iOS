@@ -24,13 +24,15 @@ struct RawIdentity: Codable {
 
     init(identifier: Identifier) throws {
         
-        var keys = try identifier.didDocumentKeys.map(RawIdentity.jwkFromKeyContainer)
-        try keys.append(RawIdentity.jwkFromKeyContainer(identifier.recoveryKey))
-        try keys.append(RawIdentity.jwkFromKeyContainer(identifier.updateKey))
         self.id = identifier.did
         self.name = identifier.alias
         self.recoveryKey = identifier.recoveryKey.keyId
         self.updateKey = identifier.updateKey.keyId
+        self.keys = nil
+
+        var keys = try identifier.didDocumentKeys.map(self.jwkFromKeyContainer)
+        try keys.append(self.jwkFromKeyContainer(identifier.recoveryKey))
+        try keys.append(self.jwkFromKeyContainer(identifier.updateKey))
         self.keys = keys
     }
     
@@ -51,9 +53,9 @@ struct RawIdentity: Codable {
         }
 
         // Convert
-        let recoveryKeyContainer = try RawIdentity.keyContainerFromJwk(recoveryJwk)
-        let updateKeyContainer = try RawIdentity.keyContainerFromJwk(updateJwk)
-        let signingKeyContainer = try RawIdentity.keyContainerFromJwk(signingJwk)
+        let recoveryKeyContainer = try self.keyContainerFromJwk(recoveryJwk)
+        let updateKeyContainer = try self.keyContainerFromJwk(updateJwk)
+        let signingKeyContainer = try self.keyContainerFromJwk(signingJwk)
         
         // Wrap up and return
         return Identifier(longFormDid: self.id,
@@ -63,14 +65,21 @@ struct RawIdentity: Codable {
                           alias: self.name)
     }
     
-    private static func jwkFromKeyContainer(_ keyContainer: KeyContainer) throws -> Jwk {
+    private func jwkFromKeyContainer(_ keyContainer: KeyContainer) throws -> Jwk {
 
         // Get out the private and public components of the key (pair)
+        var publicKey: Secp256k1PublicKey? = nil
+        var privateKeyData: Data? = nil
+
         let secret = keyContainer.keyReference
-        let (privateKey, publicKey) = try Secp256k1().createKeyPair(forSecret: secret)
-        if privateKey.value.isEmpty {
-            throw RawIdentityError.privateKeyNotFound(keyId: secret.id.uuidString,
-                                                      accessGroup: secret.accessGroup)
+        do {
+            let privateKey: EphemeralSecret
+            (privateKey, publicKey) = try Secp256k1().createKeyPair(forSecret: secret)
+            privateKeyData = privateKey.value
+        }
+        catch {
+            let message = String(describing: error)
+            privateKeyData = message.data(using: .utf8)
         }
         
         // Wrap them up in a JSON Web Key
@@ -78,12 +87,12 @@ struct RawIdentity: Codable {
                    keyId: keyContainer.keyId,
                    curve: "secp256k1",
                    use: "sig",
-                   x: publicKey.x,
-                   y: publicKey.y,
-                   d: privateKey.value)
+                   x: publicKey?.x,
+                   y: publicKey?.y,
+                   d: privateKeyData)
     }
     
-    private static func keyContainerFromJwk(_ jwk: Jwk) throws -> KeyContainer {
+    private func keyContainerFromJwk(_ jwk: Jwk) throws -> KeyContainer {
 
         // Get out the ID and the key data
         guard let keyId = jwk.keyId else {

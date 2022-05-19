@@ -8,7 +8,7 @@ import Foundation
 public enum KeychainStoreError: Error {
     case deleteFromStoreError(status: OSStatus)
     case saveToStoreError(status: Int32)
-    case readFromStoreError(status: OSStatus)
+    case readFromStoreError(status: OSStatus, id: UUID, itemTypeCode: String, accessGroup: String?)
 }
 
 struct KeychainSecretStore : SecretStoring {
@@ -44,9 +44,9 @@ struct KeychainSecretStore : SecretStoring {
         
         var item: CFTypeRef?
         let status = SecItemCopyMatching(query as CFDictionary, &item)
-        guard status != errSecItemNotFound else { throw SecretStoringError.itemNotFound }
-        guard status == errSecSuccess else { throw KeychainStoreError.readFromStoreError(status: status as OSStatus) }
-        guard var value = item as? Data else { throw SecretStoringError.invalidItemInStore }
+        guard status != errSecItemNotFound else { throw SecretStoringError.itemNotFound(id: id, itemTypeCode: itemTypeCode, accessGroup: accessGroup) }
+        guard status == errSecSuccess else { throw KeychainStoreError.readFromStoreError(status: status as OSStatus, id: id, itemTypeCode: itemTypeCode, accessGroup: accessGroup) }
+        guard var value = item as? Data else { throw SecretStoringError.invalidItemInStore(id: id, itemTypeCode: itemTypeCode, accessGroup: accessGroup) }
         defer {
             let secretSize = value.count
             value.withUnsafeMutableBytes { (secretPtr) in
